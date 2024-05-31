@@ -1,0 +1,7 @@
+openai
+python-dotenv
+yfinance
+pandas
+numpy
+flask
+flask-cors
