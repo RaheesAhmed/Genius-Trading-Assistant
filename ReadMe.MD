@@ -2,6 +2,8 @@
 
 This project is a Flask-based web application and a REST API that serves a static chatbot interface and provides a cryptocurrency trading assistant through a REST API. The chatbot can fetch cryptocurrency data, calculate various technical indicators, and provide trading advice.
 
+![Screenshot](static/images/screenshot.PNG)
+
 ## Project Structure
 
 ```
