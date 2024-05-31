@@ -1,6 +1,8 @@
 # Trade Genius Chatbot
 
-This project is a Flask-based web application and a REST API that serves a static chatbot interface and provides a cryptocurrency trading assistant through a REST API. The chatbot can fetch cryptocurrency data, calculate various technical indicators, and provide trading advice.
+The Trade Genius Chatbot is an innovative web application designed to provide users with a seamless interface for interacting with a cryptocurrency trading assistant. Built using Flask, this application serves a static files for chatbot interface that allows users to fetch real-time cryptocurrency data, perform technical analysis, and receive trading advice.
+
+The Trade Genius Chatbot is an innovative web application designed to provide users with a seamless interface for interacting with a cryptocurrency trading assistant. This app allows users to fetch real-time cryptocurrency data, perform technical analysis, and receive trading advice.
 
 ![Screenshot](static/images/screenshot.PNG)
 
