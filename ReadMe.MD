@@ -32,9 +32,14 @@ trading_assistant/
 1. Clone the repository:
 
 ```
-git clone https://github.com/yourusername/my_flask_app.git
-cd my_flask_app
+git clone https://github.com/RaheesAhmed/Genius-Trading-Assistant.git
 
+```
+
+go to the directory
+
+```
+cd Genius-Trading-Assistant
 ```
 
 2. Install the required packages:
