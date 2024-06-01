@@ -17,9 +17,25 @@ client = OpenAI()
 client.api_key = os.getenv("OPENAI_API_KEY")
 assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
 
+# uncommit the following lines if you are using the code in a Replit environment
+# client.api_key = os.environ['OPEN_API_KEY']
+# assistant_id = os.environ['OPENAI_ASSISTANT_ID']
+
+
+def extract_ticker_from_query(query):
+    # Simple extraction logic (assuming the ticker is always at the end and formatted correctly)
+    words = query.split()
+    ticker = words[-1] if len(words[-1]) > 0 else None
+    return ticker
+
 
 def chat_with_assistant(user_query):
     try:
+        # Extract ticker symbol from user query
+        ticker = extract_ticker_from_query(user_query)
+        if not ticker:
+            return "No valid ticker symbol found in the query."
+
         # Create a thread and add a user message
         print("Creating thread...")
         thread = client.beta.threads.create()
@@ -49,7 +65,7 @@ def chat_with_assistant(user_query):
                 print(f"Processing tool call for function: {tool.function.name}")
 
                 if tool.function.name == "fetch_data":
-                    data = fetch_data("BTC-USD")
+                    data = fetch_data(ticker)
                     if data.empty:
                         print("No data fetched.")
                         tool_outputs.append(
