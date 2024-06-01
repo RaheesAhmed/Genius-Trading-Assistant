@@ -393,6 +393,7 @@ document.addEventListener("DOMContentLoaded", function () {
     typingElements.forEach((element) => element.remove());
   }
 
+  // Append a message to the chatbot window
   function appendMessage(sender, message, options) {
     const chatbotContent = document.getElementById("chatbot-content");
 
@@ -413,7 +414,27 @@ document.addEventListener("DOMContentLoaded", function () {
     messageBubble.style.padding = "12px";
     messageBubble.style.borderRadius = "10px";
     messageBubble.style.maxWidth = "80%";
-    messageBubble.innerHTML = message;
+
+    if (sender === "bot") {
+      // Check if the message contains Markdown
+      const containsMarkdown =
+        message.includes("###") ||
+        message.includes("**") ||
+        message.includes("- ");
+
+      if (containsMarkdown) {
+        // Convert Markdown to HTML using Showdown
+        const converter = new showdown.Converter();
+        const htmlContent = converter.makeHtml(message);
+        messageBubble.innerHTML = htmlContent;
+      } else {
+        // Render plain message
+        messageBubble.innerHTML = message;
+      }
+    } else {
+      // Render plain message for user
+      messageBubble.innerHTML = message;
+    }
 
     if (sender === "user") {
       // For user messages, append the message bubble first, then the icon
