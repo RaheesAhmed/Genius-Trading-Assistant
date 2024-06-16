@@ -7,58 +7,54 @@ dotenv.load_dotenv()
 
 openai = OpenAI()
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
 assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
 
 
-def create_thread(ass_id, prompt):
-    # Get Assitant
+def interact_with_assistant(ass_id, prompt):
+    # Retrieve the assistant
     assistant = openai.beta.assistants.retrieve(ass_id)
 
-    # create a thread
+    # Create a new thread
     thread = openai.beta.threads.create()
+    thread_id = thread.id
+
+    # Create a message in the thread
     message = openai.beta.threads.messages.create(
-        thread_id=thread.id,
-        role="user",
-        content="Analyze the BTC-USD cryptocurrency pair.",
+        thread_id=thread_id, role="user", content=prompt
     )
 
-    # create a message
-    message = openai.beta.threads.messages.create(
-        thread_id=my_thread_id, role="user", content=prompt
-    )
-
-    # run
+    # Initiate a run with the assistant
     run = openai.beta.threads.runs.create(
-        thread_id=my_thread_id,
+        thread_id=thread_id,
         assistant_id=ass_id,
     )
+    run_id = run.id
 
-    return run.id, thread.id
+    # Check the status until the run is complete
+    while True:
+        run_status = openai.beta.threads.runs.retrieve(
+            thread_id=thread_id,
+            run_id=run_id,
+        ).status
+
+        if run_status == "completed":
+            break
+
+        time.sleep(2)
+
+    # Retrieve the messages from the thread
+    response = openai.beta.threads.messages.list(thread_id=thread_id)
+
+    if response.data:
+        return response.data[0].content[0].text.value
+    else:
+        return None
 
 
-def check_status(run_id, thread_id):
-    run = openai.beta.threads.runs.retrieve(
-        thread_id=thread_id,
-        run_id=run_id,
-    )
-    return run.status
-
-
-my_run_id, my_thread_id = create_thread(
+# Example usage
+response_content = interact_with_assistant(
     assistant_id, "[topic]: make money with chatgpt"
 )
 
-
-status = check_status(my_run_id, my_thread_id)
-
-while status != "completed":
-    status = check_status(my_run_id, my_thread_id)
-    time.sleep(2)
-
-
-response = openai.beta.threads.messages.list(thread_id=my_thread_id)
-
-
-if response.data:
-    print(response.data[0].content[0].text.value)
+if response_content:
+    print(response_content)

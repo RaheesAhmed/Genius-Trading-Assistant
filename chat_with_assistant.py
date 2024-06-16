@@ -3,7 +3,7 @@ import time
 import os
 import dotenv
 import json
-from fetch_crypto_prices import (
+from fetch_coincap import (
     fetch_data,
     fibonacci_levels,
     calculate_sma,
@@ -13,13 +13,17 @@ from fetch_crypto_prices import (
 
 dotenv.load_dotenv()
 
-client = OpenAI()
-client.api_key = os.getenv("OPENAI_API_KEY")
-assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
 
 # uncommit the following lines if you are using the code in a Replit environment
-# client.api_key = os.environ['OPEN_API_KEY']
-# assistant_id = os.environ['OPENAI_ASSISTANT_ID']
+# client.api_key = os.environ["OPEN_API_KEY"]
+# assistant_id = os.environ["OPENAI_ASSISTANT_ID"]
+
+
+# commit the following lines if you are using the code in a Replit environment
+api_key = os.getenv("OPEN_API_KEY")
+assistant_id = os.getenv("OPENAI_ASSISTANT_ID")
+
+client = OpenAI(api_key=api_key)
 
 
 def extract_ticker_from_query(query):
@@ -69,7 +73,7 @@ def chat_with_assistant(user_query):
                     if data.empty:
                         print("No data fetched.")
                         tool_outputs.append(
-                            {"tool_call_id": tool.id, "output": json.dumps([])}
+                            {"tool_call_id": tool.id, "output": json.dumps(data)}
                         )
                     else:
                         data_output = data.to_dict(orient="records")
@@ -79,8 +83,8 @@ def chat_with_assistant(user_query):
                         )
 
                 elif tool.function.name == "fibonacci_levels":
-                    high = data["High"].max()
-                    low = data["Low"].min()
+                    high = data["close"].max()
+                    low = data["close"].min()
                     fib_levels = fibonacci_levels(high, low)
                     print("Calculated Fibonacci levels:", fib_levels)
                     tool_outputs.append(

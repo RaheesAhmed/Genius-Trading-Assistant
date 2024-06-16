@@ -14,6 +14,7 @@ my_updated_assistant = client.beta.assistants.update(
     model="gpt-4o",
     name="Trade Genius",
     tools=[
+        {"type": "code"},
         {
             "type": "function",
             "function": {

@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, send_from_directory
 import flask_cors
 from chat_with_assistant import chat_with_assistant
 
-
 app = Flask(__name__, static_folder="static")
 
 # Enable CORS
@@ -25,16 +24,13 @@ def index():
 
 @app.route("/chat", methods=["POST"])
 def chat():
-    # Get the user query from the POST request
     data = request.get_json()
-    user_query = data.get("query", "")
-
-    # Call the chat_with_assistant function
-    if user_query:
-        response = chat_with_assistant(user_query)
-        return jsonify({"response": response})
-    else:
+    if not data or "query" not in data:
         return jsonify({"error": "No query provided"}), 400
+
+    user_query = data["query"]
+    response = chat_with_assistant(user_query)
+    return jsonify({"response": response})
 
 
 if __name__ == "__main__":
